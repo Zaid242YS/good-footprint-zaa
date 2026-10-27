@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#93410F">
+<meta name="description" content="Journal Footprint Ledger — a 90-entry daily ledger for entrepreneurs and business owners. A Creed-to-Commerce™ companion app by The Balanced Middle Path Academy, LLC.">
+<title>Journal Footprint Ledger — Creed-to-Commerce™ Companion App</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2393410F'/%3E%3Ccircle cx='20' cy='34' r='5' fill='%23fff'/%3E%3Ccircle cx='32' cy='28' r='5' fill='%23fff'/%3E%3Ccircle cx='44' cy='22' r='5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brown:#93410F;--brown-d:#78310A;--brown-l:#B8641F;--cream:#F5ECE6;--paper:#FFFFFF;--bg:#FBF8F5;
+  --ink:#1F2937;--muted:#6B7280;--line:#E5DDD6;--gold:#C8A24A;--green:#2F5D3A;--danger:#A32020;
+  --field:#FFFDFB;--shadow:0 2px 10px rgba(60,30,10,.08);
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;--ar:"Amiri","Traditional Arabic","Noto Naskh Arabic",serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;font-size:16px}
+button,input,textarea,select{font:inherit;color:inherit}
+a{color:var(--brown)}
+.ar{font-family:var(--ar);direction:rtl}
+.sr{position:absolute;left:-9999px}
+/* ---------- cover ---------- */
+#cover{position:fixed;inset:0;background:var(--brown);z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+#cover .frame{position:relative;width:100%;max-width:640px;min-height:calc(100vh - 36px);border:2px solid #fff;padding:10px;display:flex}
+#cover .frame-in{border:1px solid #fff;flex:1;padding:28px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;color:#fff;gap:14px}
+.cv-card{background:var(--brown-d);border-radius:14px;padding:18px 16px;width:100%}
+.cv-card .ar{font-size:clamp(34px,8vw,52px);line-height:1.5;color:#FFE9D2}
+.cv-card .tr{font-style:italic;color:#FFE0C4;margin:0}
+.cv-card .en{font-size:13px;color:#F5D9BE;margin:2px 0 0}
+.dots{display:flex;gap:9px;justify-content:center}
+.dots i{width:7px;height:7px;border-radius:50%;background:currentColor;display:block}
+#cover h1{font-size:clamp(38px,9vw,64px);line-height:1.05;margin:6px 0 0;letter-spacing:-.5px}
+#cover hr{border:0;border-top:1.5px solid #fff;width:55%;margin:2px 0}
+#cover .tag{font-style:italic;font-size:clamp(18px,4vw,24px);margin:0}
+#cover .sub{margin:0;font-size:15px}
+.btn-begin{margin:auto;background:#fff;color:var(--brown);border:0;border-radius:99px;padding:16px 44px;font-weight:700;font-size:19px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.btn-begin:hover{transform:translateY(-1px)}
+.cv-dev{font-size:14px;line-height:1.6}
+.cv-dev b{font-size:18px}
+/* ---------- lock ---------- */
+#lock{position:fixed;inset:0;z-index:120;background:var(--brown);display:none;align-items:center;justify-content:center;padding:20px}
+#lock .box{background:#fff;border-radius:16px;max-width:380px;width:100%;padding:26px;text-align:center}
+#lock h2{color:var(--brown);margin:0 0 6px}
+/* ---------- app shell ---------- */
+#app{display:none;min-height:100vh}
+header.top{position:sticky;top:0;z-index:30;background:var(--brown);color:#fff;box-shadow:var(--shadow)}
+.top-row{display:flex;align-items:center;gap:12px;padding:10px 16px;max-width:1100px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer;background:none;border:0;color:#fff;text-align:left;padding:0}
+.brand .logo{width:34px;height:34px;border-radius:9px;background:var(--brown-d);display:grid;place-items:center}
+.brand .logo i{width:5px;height:5px;background:#fff;border-radius:50%;display:block;box-shadow:8px -4px 0 #fff,-8px 4px 0 #fff}
+.brand b{display:block;font-size:16px;line-height:1.1}
+.brand small{display:block;font-size:11px;opacity:.85}
+.top-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+#saveState{font-size:12px;opacity:.9;white-space:nowrap}
+.top-actions .btn{white-space:nowrap}
+@media(max-width:520px){.brand small{display:none}.brand b{font-size:14px}#saveState{display:none}}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;padding:0 12px 8px;max-width:1100px;margin:0 auto;scrollbar-width:thin}
+nav.tabs a{color:#fff;text-decoration:none;font-size:14px;padding:6px 12px;border-radius:99px;white-space:nowrap;opacity:.9}
+nav.tabs a.on{background:#fff;color:var(--brown);font-weight:700;opacity:1}
+nav.tabs a:hover{background:rgba(255,255,255,.18)}
+nav.tabs a.on:hover{background:#fff}
+main{max-width:1100px;margin:0 auto;padding:22px 16px 60px}
+footer.site{border-top:1px solid var(--line);padding:22px 16px 40px;text-align:center;color:var(--muted);font-size:13px}
+footer.site .dots{color:var(--brown);margin-bottom:8px}
+/* ---------- type ---------- */
+.h{color:var(--brown);font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:.2px;margin:0;display:inline-block;border-bottom:2px solid var(--brown);padding-bottom:2px}
+.h-sub{font-style:italic;color:#4B5563;font-size:14px;margin:4px 0 18px}
+.sec{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 18px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.sec h3{color:var(--brown);margin:0;font-size:18px;text-transform:uppercase;display:inline-block;border-bottom:2px solid var(--brown);padding-bottom:1px}
+.sec .sub{margin:3px 0 12px;font-size:13px;font-style:italic;color:#4B5563}
+.cream{background:var(--cream);border-radius:14px;padding:18px 20px}
+.grid{display:grid;gap:14px}
+.hm1{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}.hm2{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+@media(max-width:800px){.hm1,.hm2{grid-template-columns:1fr}}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.g2{grid-template-columns:1fr}}
+/* ---------- fields ---------- */
+label.lb{display:block;font-size:13px;color:#4B5563;margin:0 0 3px}
+input.line,textarea.line,select.line,input.box,textarea.box{width:100%;background:var(--field);border:1px solid var(--line);border-bottom:2px solid var(--brown);border-radius:8px 8px 0 0;padding:10px 12px;font-size:16px;outline:none}
+textarea.line,textarea.box{resize:vertical;min-height:46px;display:block}
+textarea.box{border:1px solid var(--line);border-bottom:2px solid var(--brown);min-height:140px}
+input.line:focus,textarea.line:focus,select.line:focus,textarea.box:focus{background:#fff;box-shadow:0 0 0 3px rgba(147,65,15,.15)}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--brown);color:#fff;font-weight:700;font-size:14px;flex:none}
+.row{display:flex;gap:12px;align-items:center}
+.row.top{align-items:flex-start}
+.row.wrap{flex-wrap:wrap}
+.btn{border:1.5px solid var(--brown);background:var(--brown);color:#fff;border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:hover{background:var(--brown-d)}
+.btn.alt{background:#fff;color:var(--brown)}
+.btn.alt:hover{background:var(--cream)}
+.btn.sm{padding:5px 11px;font-size:13px;border-radius:8px}
+.btn.danger{background:#fff;color:var(--danger);border-color:var(--danger)}
+.btn.danger:hover{background:#fdecec}
+.btn.green{background:var(--green);border-color:var(--green)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.pill{display:inline-block;background:var(--brown);color:#fff;font-weight:800;border-radius:99px;padding:10px 26px;font-size:20px;letter-spacing:.5px}
+.muted{color:var(--muted)}.small{font-size:13px}
+.chip{display:inline-block;font-size:12px;border-radius:99px;padding:2px 10px;background:var(--cream);color:var(--brown);font-weight:600}
+.chip.sample{background:#FFF3CD;color:#7a5b00}
+/* mood + habits */
+.moods{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.mood-b{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px}
+.mood-b .ring{width:52px;height:52px;border-radius:50%;border:2.5px solid var(--brown);display:grid;place-items:center;font-weight:700;color:var(--brown);font-size:18px;background:#fff;transition:.15s}
+.mood-b:hover .ring{background:var(--cream)}
+.mood-b.on .ring{background:var(--brown);color:#fff}
+.mood-b small{font-size:12px;color:#4B5563}
+.habits{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:700px){.habits{grid-template-columns:1fr 1fr}}
+.hab{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;background:var(--field);font-size:15px}
+.hab input{appearance:none;width:22px;height:22px;border:2px solid var(--brown);border-radius:4px;display:grid;place-items:center;flex:none;margin:0;background:#fff;cursor:pointer}
+.hab input:checked{background:var(--brown)}
+.hab input:checked::after{content:"✓";color:#fff;font-size:15px;line-height:1;font-weight:700}
+.hab:has(input:checked){background:var(--cream);border-color:var(--brown)}
+.aff{border-left:4px solid var(--brown)}
+.aff small{color:var(--brown);font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.3px}
+.aff textarea{background:transparent;border:0;border-bottom:1px dashed rgba(147,65,15,.4);width:100%;font-style:italic;font-size:18px;resize:none;outline:none;padding:4px 0;min-height:34px}
+.prompt-box{background:var(--cream);border-radius:12px 12px 0 0;padding:14px 16px;font-style:italic}
+.divider{margin:12px 0;color:var(--brown)}
+/* entry header */
+.entry-head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px;flex-wrap:wrap}
+.entry-head .dt{display:flex;gap:10px;align-items:center}
+.pager{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:8px}
+.jump{display:grid;grid-template-columns:repeat(15,1fr);gap:4px;margin-top:10px}
+@media(max-width:700px){.jump{grid-template-columns:repeat(10,1fr)}}
+.jump button{border:1px solid var(--line);background:#fff;border-radius:6px;font-size:12px;padding:5px 0;cursor:pointer;color:var(--muted)}
+.jump button.f{background:var(--cream);color:var(--brown);font-weight:700;border-color:#e0c8b6}
+.jump button.c{background:var(--brown);color:#fff;border-color:var(--brown)}
+/* goals */
+.goal{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.goal:last-child{border:0}
+.goal .fields{flex:1;display:grid;gap:10px}
+.goal.done .fields input{text-decoration:line-through;opacity:.7}
+/* vision */
+.vcards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:640px){.vcards{grid-template-columns:1fr}}
+.vcard{border:1px solid var(--line);background:#FAF9F7;border-radius:16px;padding:16px}
+.vcard h4{margin:0;color:var(--brown);font-size:17px}
+.vcard .hint{font-size:13px;color:#9CA3AF;font-style:italic;margin:2px 0 8px}
+.vimg{position:relative;margin-bottom:8px}
+.vimg img{width:100%;max-height:220px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block}
+.vimg button{position:absolute;top:6px;right:6px}
+.vtools{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+/* prompts */
+.pcat{margin:22px 0 8px;display:flex;align-items:center;gap:10px;color:var(--brown);font-size:20px;font-weight:700}
+.pcat::before{content:"";width:12px;height:30px;border-radius:5px;background:var(--brown)}
+.plist{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 28px}
+@media(max-width:800px){.plist{grid-template-columns:1fr}}
+.p{display:flex;gap:12px;padding:8px 6px;border-radius:8px;cursor:default}
+.p:hover{background:var(--cream)}
+.p b{color:var(--brown-l);min-width:32px;text-align:right}
+.p .acts{margin-top:4px;display:flex;gap:6px;flex-wrap:wrap}
+mark{background:#FFE08A;border-radius:3px}
+/* contents */
+.toc a{display:flex;gap:14px;align-items:center;padding:16px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:19px}
+.toc a::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--brown);flex:none}
+.toc a:hover{background:var(--cream)}
+/* dashboard */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.stat{display:flex;flex-direction:column;justify-content:center}
+.stat b{display:block;font-size:30px;color:var(--brown);line-height:1.1}
+.stat span{font-size:13px;color:var(--muted)}
+.bar{height:10px;background:var(--cream);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brown);border-radius:99px}
+.ring-wrap{position:relative;width:130px;height:130px;flex:none}
+.ring-wrap b{position:absolute;inset:0;display:grid;place-items:center;font-size:26px;color:var(--brown)}
+.creed{background:linear-gradient(135deg,var(--green),#244a2d);color:#fff;border-radius:14px;padding:16px 20px;border:1px solid var(--gold)}
+.creed small{color:var(--gold);font-weight:700;letter-spacing:.8px;text-transform:uppercase;font-size:12px}
+.creed p{margin:4px 0 0;font-family:var(--ar);font-size:22px;line-height:1.5}
+/* entries index */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.ecard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;min-height:92px}
+.ecard:hover{border-color:var(--brown)}
+.ecard b{color:var(--brown)}
+.ecard.empty{opacity:.55}
+.ecard p{margin:4px 0 0;font-size:13px;color:#4B5563;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* modal / toast */
+.modal-bg{position:fixed;inset:0;background:rgba(20,10,4,.55);z-index:90;display:flex;align-items:center;justify-content:center;padding:14px}
+.modal{background:#fff;border-radius:16px;max-width:760px;width:100%;max-height:90vh;display:flex;flex-direction:column}
+.modal header{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal header h3{margin:0;color:var(--brown)}
+.modal .body{padding:14px 18px;overflow:auto}
+canvas#sk{width:100%;height:auto;aspect-ratio:4/3;border:1px solid var(--line);border-radius:10px;background:#fff;touch-action:none;cursor:crosshair}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1F2937;color:#fff;padding:10px 18px;border-radius:10px;z-index:200;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+.warn{background:#FFF3CD;border:1px solid #E6C86E;color:#6b4e00;border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:14px}
+.closing{text-align:center;max-width:720px;margin:0 auto}
+.closing h2{color:var(--brown);font-size:34px;margin:10px 0}
+.closing p{font-size:18px}
+.closing .ar{font-size:44px;color:var(--brown);margin:12px 0 0;line-height:1.4}
+.sig{max-width:340px;margin:24px auto}
+/* ---------- report ---------- */
+#rp{display:none;position:fixed;inset:0;z-index:80;background:#E7E1DB;overflow:auto}
+body.rp-open #rp{display:block}
+.rp-bar{position:sticky;top:0;background:var(--brown);color:#fff;padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:2}
+.rp-bar .btn{background:#fff;color:var(--brown)}
+.rp-pages{max-width:820px;margin:18px auto;padding:0 10px}
+.rp-page{background:#fff;padding:34px 38px;margin-bottom:16px;box-shadow:var(--shadow);font-size:14px}
+.rp-page:not(.rp-cover)::after{content:"Journal Footprint Ledger • The Balanced Middle Path Academy, LLC • Creed-to-Commerce™";display:block;margin-top:22px;font-size:8pt;color:#9CA3AF;text-align:center;border-top:1px solid #E5DDD6;padding-top:6px}
+.rp-cover{background:var(--brown);color:#fff;text-align:center;padding:60px 30px;border-radius:0}
+.rp-cover .ar{font-size:44px;line-height:1.5}
+.rp-cover h1{font-size:44px;margin:10px 0}
+.rp h2{color:var(--brown);font-size:20px;border-bottom:2px solid var(--brown);display:inline-block;margin:0 0 6px;text-transform:uppercase}
+.rp h3{color:var(--brown);font-size:14px;margin:14px 0 4px;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:2px}
+.rp .val{white-space:pre-wrap;margin:0 0 4px;min-height:1.2em}
+.rp .val.empty{color:#9CA3AF}
+.rp table{width:100%;border-collapse:collapse;font-size:13px}
+.rp td,.rp th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top}
+.rp .head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:8px}
+.rp .pill{font-size:15px;padding:6px 18px}
+.rp .aff{background:var(--cream);border-radius:8px;padding:8px 12px;font-style:italic}
+.rp .two{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.rp-vimg{max-width:100%;max-height:200px;border-radius:8px;display:block;margin:4px 0}
+@media print{
+  @page{size:A4;margin:14mm 14mm 18mm}
+  html,body{background:#fff}
+  body.rp-open #app,body.rp-open #cover,body.rp-open #lock,body.rp-open #toast,body.rp-open .modal-bg{display:none!important}
+  #rp{position:static;overflow:visible;background:#fff;display:block}
+  .rp-bar{display:none}
+  .rp-pages{max-width:none;margin:0;padding:0}
+  .rp-page{box-shadow:none;margin:0;padding:0;font-size:11.5pt;page-break-after:always;break-after:page}
+  .rp-page:last-child{page-break-after:auto;break-after:auto}
+  .rp-cover{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:90px 30px;min-height:240mm}
+  .rp-page .aff,.rp-page .pill{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-entry{break-inside:auto}
+  .rp .row-keep{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section id="cover" aria-label="Cover">
+  <div class="frame"><div class="frame-in">
+    <div class="cv-card">
+      <div class="ar" lang="ar">بسم الله الرحمن الرحيم</div>
+      <p class="tr">Bismillah Ar-Rahman Ar-Rahim</p>
+      <p class="en">In the name of Allah, the Most Gracious, the Most Merciful</p>
+    </div>
+    <hr>
+    <div class="dots"><i></i><i></i><i></i></div>
+    <h1>Journal Footprint Ledger</h1>
+    <hr>
+    <p class="tag">Track the daily steps. Own the whole journey.</p>
+    <p class="sub">An undated daily ledger for entrepreneurs and business owners</p>
+    <button class="btn-begin" id="beginBtn">Tap to Begin &nbsp;→</button>
+    <div class="cv-card cv-dev">
+      This journal was developed by<br><b>Zaid Adib Ansari</b><br>from The Balanced Middle Path Academy, LLC<br><small>Creed-to-Commerce™</small>
+    </div>
+  </div></div>
+</section>
+
+<!-- LOCK -->
+<section id="lock" aria-label="Locked">
+  <div class="box">
+    <div class="ar" style="font-size:30px;color:var(--brown)" lang="ar">بسم الله الرحمن الرحيم</div>
+    <h2>Your ledger is locked</h2>
+    <p class="muted small">Enter your passcode to open your private footprints.</p>
+    <input class="line" id="lockIn" type="password" inputmode="text" autocomplete="current-password" placeholder="Passcode" style="text-align:center">
+    <p id="lockErr" class="small" style="color:var(--danger);min-height:20px;margin:6px 0"></p>
+    <button class="btn" id="lockBtn" style="width:100%">Unlock</button>
+    <p style="margin:14px 0 0"><button class="btn sm danger" id="lockReset">Forgot passcode? Erase everything</button></p>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app">
+  <header class="top">
+    <div class="top-row">
+      <button class="brand" data-go="#/home" aria-label="Home">
+        <span class="logo"><i></i></span>
+        <span><b>Journal Footprint Ledger</b><small>Creed-to-Commerce™ • BMPA</small></span>
+      </button>
+      <div class="top-actions">
+        <span id="saveState">Saved ✓</span>
+        <button class="btn sm alt" data-act="quickReport">PDF Report</button>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+  </header>
+  <main id="main"></main>
+  <footer class="site">
+    <div class="dots"><i></i><i></i><i></i></div>
+    Journal Footprint Ledger • The Balanced Middle Path Academy, LLC • Creed-to-Commerce™<br>
+    <a href="#/about">About &amp; copyright</a> · Your entries are stored privately on this device only.
+  </footer>
+</div>
+
+<div id="rp" aria-label="Report preview"></div>
+<div id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   DATA — extracted from the Journal Footprint Ledger PDF
+   ============================================================ */
+const PROMPTS = ["Describe your business three years from today as if giving a tour to your younger self. What do they notice first?", "What would your company look like if you could only work on it two days per week? What would you cut immediately?", "Which current project would you kill today if you weren't emotionally attached to the hours already invested?", "Write your one-sentence mission as you'd explain it to a taxi driver. Does your calendar this week reflect it?", "What is the single constraint holding your business back — capital, time, skill, or courage? What's one move against it?", "If a competitor studied your business for a month, what weakness would they exploit first?", "What opportunity keeps reappearing that you keep postponing? What is the real reason you haven't started?", "Which decision are you delaying by 'gathering more information'? What would you decide with what you already know?", "What does 'enough' look like for this business — revenue, team size, hours? Write the actual numbers.", "If you had to double your prices tomorrow, what would you need to add or prove to justify it?", "What part of your business model would break at ten times the customers? Sketch the fix before you need it.", "Name one thing you're doing because 'that's how everyone in the industry does it.' What happens if you stop?", "Which of your revenue streams deserves more attention, and which is quietly stealing it?", "What would you build if you knew your biggest client would leave in 90 days?", "Write the trade-publication headline you want about your company in five years. What starts this quarter?", "What is the smallest experiment you could run this week to test your biggest strategic assumption?", "If you sold the business tomorrow, what would the buyer say is its most valuable asset? Are you protecting it?", "Which partnership or alliance would change your trajectory, and what's the first email you'd need to send?", "What are you world-class at that your marketing never mentions?", "Describe the customer you refuse to serve. How does saying no to them sharpen who you're for?", "Which offer earned you the most profit per hour of effort last quarter? Why isn't it your lead offer?", "Trace your last five sales backwards. What single channel or moment actually created them?", "What is one recurring expense you'd never approve again if it appeared as a new request today?", "Where are you underpricing out of fear rather than strategy? Whose permission are you waiting for?", "What would you have to believe about your value to ask for the sale twice as confidently?", "Which customer objection do you hear most often, and what single asset would retire it?", "If revenue had to come from existing customers only for 90 days, what would you offer them first?", "What does your pipeline look like eight weeks from now, honestly? What today-action changes that picture?", "Which metric do you check that makes you feel good but changes nothing? What should replace it?", "Write the follow-up message you've been avoiding sending. What's the worst realistic reply?", "What part of your sales process would embarrass you if a mentor watched it live?", "Name a product or tier you could remove to make buying simpler. What's stopping you?", "When did you last raise prices? What evidence says the market would bear more?", "What is your cost of acquiring one customer, roughly? If you don't know, what's the first number to find?", "Which 'small' client teaches you the most about serving bigger ones?", "What free work are you doing that should be productized and priced by this Friday?", "If cash got tight in 60 days, what are the first three moves — in order?", "What would a ten-percent improvement in retention be worth this year? What earns that improvement?", "Which of your marketing efforts would you stop today if you saw the numbers side by side?", "Describe the moment a customer decides you're worth it. How do you engineer that moment earlier?", "What task did you do this week that someone on your team could do eighty percent as well? Why are you still holding it?", "Write the difficult feedback you owe someone. What makes it kind to deliver and unkind to withhold?", "Which decision keeps landing on your desk that should have a standing rule instead? Draft the rule.", "Who in your team or network is underused, and what would stretch them productively this month?", "What do people learn about your values from watching how you handle a bad week?", "If you were hired tomorrow to replace yourself as CEO, what would you change in the first 30 days?", "What meeting on your calendar produces the least value per person-hour? Redesign or remove it.", "Which hire, contractor, or partner would buy back ten hours of your week? What does not hiring them actually cost?", "What standard do you tolerate from yourself that you'd never accept from an employee?", "Describe the last time you changed your mind because someone junior pushed back. If you can't, why not?", "What knowledge lives only in your head that would damage the business if you were unreachable for a month?", "Who gave you a chance early in your career, and how are you paying that forward inside your business?", "What behavior are you rewarding by accident — with attention, praise, or silence?", "Write the job description for the next role you'll hire, even if hiring is a year away.", "When did you last say 'I don't know' out loud to your team? What did it cost or earn you?", "Which relationship with a supplier, mentor, or peer needs repair or renewal? What's the opening sentence?", "What would your team say is the real bottleneck in the company? Have you asked them this quarter?", "How do you want to be described by someone who worked for you five years ago? Are you earning that description?", "What's one process you should stop supervising and start trusting completely?", "If your business had a culture handbook written from your actions alone, what would chapter one say?", "What failure from the past year carried the most useful data? Name the data specifically.", "Which fear is currently disguised as 'being realistic'?", "Write about a time you nearly quit. What kept you in — and is that reason still true today?", "What does burnout look like in you two weeks before it arrives? List the early signals.", "Which criticism stung because it was partly true? What's the true part worth keeping?", "What are you proving, and to whom? What would you build if you had nothing to prove?", "Describe your relationship with rest. Is it a reward, a guilt, or a discipline?", "What boundary between work and life did you break this month? What did it actually buy you?", "Which past version of yourself would be astonished by your current ordinary Tuesday?", "What's the most expensive lesson you've paid for in this business? Have you extracted full value from it yet?", "When results stall, what story do you tell yourself? Write it — then write the evidence against it.", "What would you attempt this quarter if a failed attempt cost you nothing socially?", "Name a rival whose success irritates you. What is that irritation pointing at in your own ambitions?", "What decision are you outsourcing to 'someday'? Give it a date or give it up entirely.", "How do you speak to yourself after a lost deal? Write the version you'd offer a trusted friend instead.", "What did you handle this year that would have broken you three years ago?", "Which habit quietly protects your judgment — sleep, prayer, exercise, reading? What's threatening it now?", "What are you tolerating that costs you energy every single day? What's the smallest step toward ending it?", "Write your definition of success that doesn't mention money. Now check: are you pursuing it too?", "If this venture ended tomorrow, what would remain yours forever — skills, relationships, character?", "Recall the last piece of unprompted praise from a customer. What exactly did they praise?", "What does your customer's day look like one hour before they need you? Describe it in real detail.", "Which customer complaint do you secretly agree with?", "What do customers actually buy from you — the product, or the feeling after? Name the feeling precisely.", "Write the onboarding experience you'd want if you were your own newest customer. Where does reality fall short?", "Which customer would you clone if you could? List the three traits that make them ideal.", "What promise does your brand make that your operations sometimes break?", "When did a customer surprise you with how they used your product? What does that reveal about untapped markets?", "What would make a customer describe you to a friend in one excited sentence? Write that sentence.", "Which step in your customer journey has the most friction? What would removing it cost — and earn?", "What question do prospects ask that your website never answers directly?", "Describe your customer's alternative to you — including doing nothing. Why should they move?", "What small, inexpensive moment of delight could you add to every order or engagement this month?", "Which customer relationship has drifted that a ten-minute call could revive today?", "What data are you collecting about customers that you never act on? Act on one piece this week.", "If your best customer wrote your next product's spec, what would be on the first line?", "What part of your service would customers pay extra to speed up?", "When a customer leaves, do you know why? Write the exit question you should be asking.", "What do you know about your industry that your customers wish someone would just tell them honestly?", "Whose life is measurably better because your business exists? Write their story in five sentences."];
+const AFFS = ["My discipline today is my competitive advantage tomorrow.", "Every problem I solve makes my business more valuable.", "I attract the right clients because I deliver real results.", "My vision is bold and my execution is steady.", "I build wealth by serving others with integrity and skill.", "Clarity is my superpower — I know what matters most today.", "I am the kind of leader my team is proud to follow.", "My consistency compounds. Every honest entry moves the needle.", "I trade excuses for evidence and fear for focused action.", "Profit is the reward for the value I create, not luck.", "I finish what I start because I know why I started.", "My boundaries protect my energy and my energy drives my mission.", "Every 'no' I say to distraction is a 'yes' to my best work.", "I grow my business from strength, not from scarcity.", "I am worthy of the success I am building — and I do the work.", "My mindset is my balance sheet — I invest in it every morning.", "Problems are just opportunities that haven't been priced yet.", "I celebrate small wins because they compound into empires.", "My reputation is built one honest conversation at a time.", "I lead with vision, execute with precision, and rest without guilt.", "Momentum is mine when I show up consistently — so I show up.", "I have everything I need to take the next right step today.", "My business model grows stronger each time I test and iterate.", "I turn lessons into leverage and setbacks into strategy.", "Every client I serve becomes a story I'm proud to tell.", "I am not afraid of the numbers — I read them and I act.", "My ambition is matched by my accountability to the work.", "I delegate what drains me and double down on what only I can do.", "Progress over perfection — I ship, I learn, I improve.", "The best investment I make is in my own judgment and growth.", "I build systems, not just hustle — this business runs with intention.", "My gratitude opens doors that my ambition alone cannot.", "I am the author of my company's story — and today I write well.", "Resilience is not a trait I was born with — it's a skill I practice.", "Every conversation I enter, I bring my fullest presence and value.", "I price my work at its true worth because I know my worth.", "My decisions today create the options I will have tomorrow.", "I seek mentors, learn from rivals, and stay humble in the market.", "My mornings set the standard — my evenings confirm the score.", "The gap between where I am and where I'm going is bridged by today.", "I run a business that aligns with my values, not just my income goals.", "Courage is not the absence of doubt — it's submitting the proposal anyway.", "My team rises when I lead from the front and trust from the middle.", "I ask for help because leverage is intelligence, not weakness.", "Today I will do the one hard thing my future self will thank me for.", "My network is an asset I cultivate with generosity and sincerity.", "I replace anxiety with action — the plan reveals itself in the doing.", "I am building something that outlasts the moment. I treat it accordingly.", "Each lesson learned is a brick. I am not surviving — I am constructing.", "I close the day having given my best — and that is always enough.", "My focus is currency. I spend it on what matters most, not most urgent.", "I release comparison and return to my own metrics and mission.", "What I build today belongs to a person who refused to quit yesterday.", "My values are the constitution of my business — they do not bend.", "I see opportunity where others see noise because I know my niche.", "Every failure is feedback. I take notes and I try again smarter.", "I earn trust slowly and protect it fiercely — that is my brand promise.", "The market rewards those who solve real problems — I solve real problems.", "I am disciplined with my time because I respect the dreams that need it.", "My best strategy is to outserve, outlearn, and outlast the distraction.", "I am not chasing success. I am building the conditions for it, daily.", "My gratitude is not passive — it sharpens my eye for what to protect.", "Every footprint I record is proof that I am a business owner who reflects.", "I don't wait for motivation. I build momentum through motion.", "Integrity is my pricing strategy, my marketing, and my retention plan.", "I invest in rest because exhausted founders make expensive decisions.", "My clarity of purpose makes every tactical decision easier to make.", "I attract abundance by operating from a place of genuine service.", "What I measure, I manage — what I manage, I improve.", "I am the kind of entrepreneur who finishes the quarter having learned.", "My inner dialogue is my leadership training — I choose it deliberately.", "The right clients find me when I am clear, consistent, and courageous.", "I honor the vision by doing the work — not just dreaming about the work.", "My systems free my creativity. I build both because I need both.", "I review, I adjust, I recommit — that is the cadence of a real founder.", "Every dollar I earn is a vote from a customer who believes in my value.", "I protect my focus like it's my most valuable business asset — because it is.", "I lead with empathy and decide with data. The combination is unbeatable.", "My calendar reflects my priorities. I audit it accordingly.", "I choose the long game even when the short game screams louder.", "I am becoming the version of myself my business has always needed.", "My morning intention is the compass that keeps the day on course.", "What I learn today cannot be taken from me — it compounds forever.", "I operate from abundance, plan for contingency, and execute with urgency.", "The best pitch I ever make is the one that solves a real problem clearly.", "I trust the process because I built the process — and I built it wisely.", "My gratitude practice is a business practice — it recalibrates everything.", "I am not finished — I am 90 footprints into a journey without an end.", "My discipline today is my competitive advantage tomorrow.", "Every problem I solve makes my business more valuable."];
+const CATS = [["Vision & Strategy",1,20],["Money & Sales",21,40],["Leadership & Team",41,60],["Resilience & Mindset",61,80],["Customers & Value",81,100]];
+const MOODS = ["Drained","Low","Steady","Energised","Peak"];
+const VCARDS = [["flagship","The flagship offer"],["team","The team & partners"],["customer","The customer you serve"],["workspace","The workspace & lifestyle"],["legacy","The impact & legacy"],["enough","The number that says 'enough'"]];
+const TOTAL = 90;
+const KEY = "bmpa_journal_footprint_ledger_v1";
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const clamp = n => Math.max(1, Math.min(TOTAL, n | 0));
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const longDate = (d = new Date()) => d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+function fmtDate(s) { if (!s) return ""; const d = new Date(s + "T00:00:00"); return isNaN(d) ? s : longDate(d); }
+let _toastT;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(_toastT); _toastT = setTimeout(() => t.classList.remove("on"), 2600); }
+const mem = {}; // fallback when sessionStorage is blocked
+const sess = { get: k => { try { return sessionStorage.getItem(k); } catch (e) { return mem[k]; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) { mem[k] = v; } } };
+
+/* ============================================================
+   STATE + STORAGE ("back end": versioned local database)
+   ============================================================ */
+function blank() {
+  return {
+    v: 1,
+    profile: { name: "", start: "", intention: "", creed: "" },
+    goals: Array.from({ length: 5 }, () => ({ g: "", why: "", done: false })),
+    vision: { line: "", cards: Object.fromEntries(VCARDS.map(([k]) => [k, { t: "", img: "" }])) },
+    habits: ["Deep work", "No social before 9am", "Moved / exercised", "Revenue action taken"],
+    entries: {},
+    closing: { signed: "" },
+    ui: { cur: 1 },
+    lock: null,
+    sample: null,           // { entries:[n], goals, vision, profile } while sample data is loaded
+    lastBackup: ""
+  };
+}
+let storageOK = true;
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) return normalise(JSON.parse(raw));
+  } catch (e) { storageOK = false; }
+  return blank();
+}
+function normalise(o) {
+  const b = blank();
+  const r = Object.assign(b, o || {});
+  r.profile = Object.assign(blank().profile, o && o.profile);
+  r.vision = Object.assign(blank().vision, o && o.vision);
+  r.vision.cards = Object.assign(blank().vision.cards, (o && o.vision && o.vision.cards) || {});
+  r.habits = (Array.isArray(r.habits) ? r.habits : b.habits).concat(blank().habits).slice(0, 4);
+  r.goals = Array.from({ length: 5 }, (_, i) => Object.assign({ g: "", why: "", done: false }, (r.goals || [])[i]));
+  r.closing = Object.assign({ signed: "" }, r.closing);
+  r.ui = Object.assign({ cur: 1 }, r.ui);
+  r.entries = r.entries || {};
+  Object.keys(r.entries).forEach(k => { r.entries[k] = Object.assign(blankEntry(), r.entries[k]); });
+  return r;
+}
+let S = load();
+let _saveT;
+function setSaveState(t) { const el = $("#saveState"); if (el) el.textContent = t; }
+function queueSave() { setSaveState("Saving…"); clearTimeout(_saveT); _saveT = setTimeout(saveNow, 350); }
+function saveNow() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); setSaveState(storageOK ? "Saved ✓" : "Saved ✓"); }
+  catch (e) { storageOK = false; setSaveState("Not saved!"); toast("Storage is full or blocked — export a backup in Settings."); }
+}
+window.addEventListener("beforeunload", () => { clearTimeout(_saveT); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} });
+
+function blankEntry() { return { date: "", g: ["", "", ""], int: "", aff: "", mood: 0, hab: [0, 0, 0, 0], pid: 0, ans: "", w: ["", "", ""], les: "", tom: "" }; }
+function getEntry(n, create) { let e = S.entries[n]; if (!e && create) e = S.entries[n] = blankEntry(); return e; }
+function isFilled(e) { return !!e && !!(e.date || e.int || e.ans || e.les || e.tom || e.mood || e.g.some(Boolean) || e.w.some(Boolean) || e.hab.some(Boolean)); }
+const affOf = (n, e) => (e && e.aff) || AFFS[n - 1] || AFFS[(n - 1) % AFFS.length];
+const pidOf = (n, e) => (e && e.pid) || n;
+
+/* mark sample data as user-owned the moment it is edited */
+function unsample(path) {
+  const sm = S.sample; if (!sm) return;
+  let m;
+  if ((m = path.match(/^entries\.(\d+)\./))) sm.entries = sm.entries.filter(n => n !== +m[1]);
+  else if (path.startsWith("goals")) sm.goals = false;
+  else if (path.startsWith("vision")) sm.vision = false;
+  else if (path.startsWith("profile")) sm.profile = false;
+  if (!sm.entries.length && !sm.goals && !sm.vision && !sm.profile) S.sample = null;
+}
+function setPath(path, val) {
+  const m = path.match(/^entries\.(\d+)\./); if (m) getEntry(+m[1], true);
+  const p = path.split("."); let o = S;
+  for (let i = 0; i < p.length - 1; i++) o = o[p[i]];
+  o[p[p.length - 1]] = val;
+  unsample(path); queueSave();
+}
+const getPath = path => path.split(".").reduce((o, k) => (o == null ? o : o[k]), S);
+
+/* ============================================================
+   STATS
+   ============================================================ */
+function stats() {
+  const ns = Object.keys(S.entries).map(Number).filter(n => isFilled(S.entries[n])).sort((a, b) => a - b);
+  const o = { n: ns.length, ns, gr: 0, wins: 0, les: 0, tom: 0, moodN: 0, moodSum: 0, hab: [0, 0, 0, 0], run: 0, best: 0, goalsDone: S.goals.filter(g => g.done).length, goalsSet: S.goals.filter(g => g.g).length };
+  ns.forEach(n => {
+    const e = S.entries[n];
+    o.gr += e.g.filter(Boolean).length; o.wins += e.w.filter(Boolean).length;
+    if (e.les) o.les++; if (e.tom) o.tom++;
+    if (e.mood) { o.moodN++; o.moodSum += e.mood; }
+    e.hab.forEach((h, i) => { if (h) o.hab[i]++; });
+  });
+  let run = 0, prev = 0;
+  ns.forEach(n => { run = n === prev + 1 ? run + 1 : 1; o.best = Math.max(o.best, run); prev = n; });
+  o.run = ns.length ? run : 0;
+  o.avgMood = o.moodN ? o.moodSum / o.moodN : 0;
+  o.next = (() => { for (let i = 1; i <= TOTAL; i++) if (!isFilled(S.entries[i])) return i; return TOTAL; })();
+  return o;
+}
+function moodChart(w = 900, h = 150) {
+  const slot = w / TOTAL; let bars = "";
+  for (let n = 1; n <= TOTAL; n++) {
+    const e = S.entries[n]; if (!e || !e.mood) continue;
+    const bh = (e.mood / 5) * (h - 24);
+    bars += `<rect x="${(n - 1) * slot + 1}" y="${h - 18 - bh}" width="${slot - 2}" height="${bh}" rx="2" fill="#93410F"><title>Footprint ${n}: ${MOODS[e.mood - 1]}</title></rect>`;
+  }
+  let grid = ""; for (let m = 1; m <= 5; m++) { const y = h - 18 - (m / 5) * (h - 24); grid += `<line x1="0" x2="${w}" y1="${y}" y2="${y}" stroke="#E5DDD6" stroke-width="1"/><text x="2" y="${y - 2}" font-size="9" fill="#6B7280">${m}</text>`; }
+  let ticks = ""; [1, 15, 30, 45, 60, 75, 90].forEach(n => { ticks += `<text x="${(n - 1) * slot}" y="${h - 4}" font-size="10" fill="#6B7280">${n}</text>`; });
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Mood and energy by footprint">${grid}${bars}${ticks}</svg>`;
+}
+
+/* ============================================================
+   ROUTER + VIEWS
+   ============================================================ */
+const NAV = [["#/home", "Home"], ["#/belongs", "My Ledger"], ["#/welcome", "Welcome"], ["#/goals", "Goals"], ["#/vision", "Vision Board"], ["#/prompts", "Prompts"], ["#/entries", "Entries"], ["#/closing", "Closing"], ["#/reports", "Reports"], ["#/settings", "Settings"]];
+function buildNav(cur) {
+  $("#tabs").innerHTML = NAV.map(([h, t]) => `<a href="${h}" class="${cur === h || (h === "#/entries" && cur === "#/entry") ? "on" : ""}">${t}</a>`).join("");
+  const on = $("#tabs a.on"); if (on && on.scrollIntoView) on.scrollIntoView({ inline: "center", block: "nearest" });
+}
+function route() {
+  const hash = location.hash || "#/home";
+  const parts = hash.split("/"); const base = parts[0] + "/" + (parts[1] || "home");
+  const arg = parts[2];
+  const views = { "#/home": vHome, "#/belongs": vBelongs, "#/welcome": vWelcome, "#/contents": vContents, "#/goals": vGoals, "#/vision": vVision, "#/prompts": vPrompts, "#/entries": vEntries, "#/entry": vEntry, "#/closing": vClosing, "#/reports": vReports, "#/settings": vSettings, "#/about": vAbout };
+  const v = views[base] || vHome;
+  buildNav(base);
+  $("#main").innerHTML = v(arg);
+  if (typeof afterRender[base] === "function") afterRender[base](arg);
+  $$("textarea.auto").forEach(grow);
+  window.scrollTo(0, 0);
+}
+const afterRender = {};
+function grow(el) { el.style.height = "auto"; el.style.height = Math.max(el.scrollHeight + 2, 46) + "px"; }
+
+const secHead = (t, sub) => `<h2 class="h">${t}</h2><p class="h-sub">${sub || ""}</p>`;
+const dotsRow = `<div class="dots divider" style="color:var(--brown)"><i></i><i></i><i></i></div>`;
+
+/* ---------- HOME / DASHBOARD ---------- */
+function vHome() {
+  const st = stats(), pct = Math.round(st.n / TOTAL * 100);
+  const C = 2 * Math.PI * 54, off = C * (1 - st.n / TOTAL);
+  const name = S.profile.name ? esc(S.profile.name.split(" ")[0]) : "Founder";
+  const habRows = S.habits.map((h, i) => { const r = st.n ? Math.round(st.hab[i] / st.n * 100) : 0; return `<div style="margin:8px 0"><div class="row small" style="justify-content:space-between"><span>${esc(h)}</span><b>${r}%</b></div><div class="bar"><i style="width:${r}%"></i></div></div>`; }).join("");
+  const lessons = st.ns.filter(n => S.entries[n].les).slice(-3).reverse().map(n => `<p style="margin:6px 0"><span class="chip">Footprint ${n}</span> ${esc(S.entries[n].les)}</p>`).join("") || `<p class="muted small">Lessons you log will appear here. "Tuition unrecorded is tuition wasted."</p>`;
+  return `
+  ${S.sample ? `<div class="warn"><b>Sample data is loaded.</b> Explore freely, then remove it from <a href="#/settings">Settings</a> — your own entries are never touched.</div>` : ""}
+  ${!storageOK ? `<div class="warn"><b>Heads-up:</b> this browser is blocking local storage, so entries will not survive closing the tab. Use Settings → Export backup often.</div>` : ""}
+  <div class="row top wrap" style="justify-content:space-between;margin-bottom:6px">
+    <div><h2 class="h">Welcome back, ${name}</h2><p class="h-sub">Track the daily steps. Own the whole journey.</p></div>
+    <button class="btn" data-go="#/entry/${st.next}">${st.n ? "Continue — Footprint " + st.next : "Begin Footprint 1"} →</button>
+  </div>
+  ${S.profile.creed ? `<div class="creed" style="margin-bottom:16px"><small>My Creed — Creed-to-Commerce™</small><p>${esc(S.profile.creed)}</p></div>` : `<div class="cream" style="margin-bottom:16px"><b style="color:var(--brown)">Creed-to-Commerce™</b> — every business activity flows from, and stays accountable to, a creed. <a href="#/belongs">Write your creed</a> and it will anchor your dashboard and every report.</div>`}
+  <div class="grid hm1">
+    <div class="sec row" style="gap:18px;align-items:center">
+      <div class="ring-wrap"><svg viewBox="0 0 130 130" width="130" height="130"><circle cx="65" cy="65" r="54" fill="none" stroke="#F5ECE6" stroke-width="12"/><circle cx="65" cy="65" r="54" fill="none" stroke="#93410F" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${off}" transform="rotate(-90 65 65)"/></svg><b>${pct}%</b></div>
+      <div><div style="font-size:28px;font-weight:800;color:var(--brown)">${st.n} <span class="muted" style="font-size:16px;font-weight:400">of ${TOTAL}</span></div><div class="small muted">footprints logged</div><div class="small" style="margin-top:6px">Current run: <b>${st.run}</b> · Best: <b>${st.best}</b></div></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>${st.gr}</b><span>blessings counted</span></div>
+      <div class="stat"><b>${st.wins}</b><span>wins recorded</span></div>
+      <div class="stat"><b>${st.les}</b><span>lessons collected</span></div>
+      <div class="stat"><b>${st.moodN ? st.avgMood.toFixed(1) : "–"}</b><span>avg. mood / 5</span></div>
+    </div>
+  </div>
+  <div class="grid hm2" style="margin-top:16px">
+    <div class="sec"><h3>Mood &amp; energy</h3><p class="sub">Every logged footprint, 1 to 90</p>${moodChart()}</div>
+    <div class="sec"><h3>Habit rates</h3><p class="sub">Share of logged days completed</p>${habRows}</div>
+  </div>
+  <div class="grid g2" style="margin-top:0">
+    <div class="sec"><h3>Latest lessons</h3><p class="sub">Tuition collected</p>${lessons}</div>
+    <div class="sec"><h3>Top 5 goals</h3><p class="sub">${st.goalsDone} of ${st.goalsSet || 5} achieved</p>${S.goals.map((g, i) => `<div class="row" style="margin:6px 0"><span class="num" style="width:24px;height:24px;font-size:12px">${i + 1}</span><span style="${g.done ? "text-decoration:line-through;opacity:.6" : ""}">${esc(g.g) || '<span class="muted">Not set yet</span>'}</span></div>`).join("")}<p style="margin:10px 0 0"><a href="#/goals">Edit goals →</a></p></div>
+  </div>
+  <div class="sec"><h3>Contents</h3><p class="sub">Tap any section to jump directly to it</p>${tocHtml()}</div>`;
+}
+const TOC = [["#/welcome", "Welcome & How to Use"], ["#/goals", "Goals & Vision"], ["#/vision", "Vision Board"], ["#/prompts", "Prompt Library — 100 unique prompts"], ["#/entries", "Daily Entries — Footprints 1 to 90"], ["#/closing", "Closing Page"]];
+const tocHtml = () => `<div class="toc">${TOC.map(([h, t]) => `<a href="${h}">${t}</a>`).join("")}</div>`;
+function vContents() { return secHead("Contents", "Tap any section to jump directly to it") + `<div class="sec">${tocHtml()}</div>`; }
+
+/* ---------- THIS LEDGER BELONGS TO ---------- */
+function vBelongs() {
+  return `<div style="max-width:640px;margin:0 auto;text-align:center">
+    <div class="dots divider" style="justify-content:center"><i></i><i></i><i></i></div>
+    <h2 class="h" style="font-size:34px;text-transform:none">This Ledger Belongs To</h2><p></p>
+    <div style="text-align:left;display:grid;gap:22px;margin-top:24px">
+      <div><label class="lb" style="text-align:center">Full name</label><input class="line" data-p="profile.name" value="${esc(S.profile.name)}" autocomplete="name"></div>
+      <div><label class="lb" style="text-align:center">Start date</label><input class="line" type="date" data-p="profile.start" value="${esc(S.profile.start)}"></div>
+      <div><label class="lb" style="text-align:center">My intention for these 90 days</label><textarea class="line auto" data-p="profile.intention" rows="2">${esc(S.profile.intention)}</textarea></div>
+      <div class="creed"><small>My Creed — Creed-to-Commerce™</small>
+        <p class="small" style="font-family:var(--sans);font-size:13px;margin:4px 0 8px;opacity:.9">The one principle your business answers to — everything you sell should flow from it, and stay accountable to it.</p>
+        <textarea class="line auto" style="background:#fff;color:var(--ink)" data-p="profile.creed" rows="2" placeholder="e.g. I will build only what I can stand behind before Allah and before my customer.">${esc(S.profile.creed)}</textarea></div>
+    </div>
+    <div class="dots divider" style="justify-content:center;margin-top:30px"><i></i><i></i><i></i></div>
+    <p class="muted" style="font-style:italic">Every empire is built one honest entry at a time.</p></div>`;
+}
+
+/* ---------- WELCOME ---------- */
+function vWelcome() {
+  return secHead("Welcome, Founder", "How to use your Journal Footprint Ledger") + `
+  <div class="sec" style="font-size:17px">
+    <p>You didn't start a business to drift through it. Yet most owners end their weeks unable to say what actually moved, what it cost, and what they learned. This ledger fixes that. It borrows the discipline of bookkeeping and applies it to the one asset no accountant tracks: your daily judgment.</p>
+    <p>Each entry takes ten to fifteen minutes and records seven things: what you're grateful for, today's dominant intention, your daily affirmation, your habit commitments, the day's wins, the lessons tuition bought you, and one thing worth doing tomorrow. Every section is there because it has a job — and the job is compounding your judgment over 90 entries.</p>
+    <p>It's undated by design. Miss a day, miss a week — nothing expires. Ninety entries is roughly one business quarter of footprints, which is exactly the horizon where strategies prove themselves or quietly fail.</p>
+    <p>Use it however you actually work: type into the fields on your laptop, write with a stylus on your tablet, or print it and keep it beside your real ledger.</p>
+  </div>
+  <div class="cream"><h3 style="color:var(--brown);margin:0 0 8px">The Daily Ritual — 4 quick-start rules</h3>
+    <ol style="margin:0;padding-left:22px;line-height:1.9">
+      <li>Anchor it to something you already do — the first coffee, the commute close, the end of the sales day.</li>
+      <li>Write gratitude first. It resets the operator's mind from scarcity to inventory.</li>
+      <li>Name ONE intention. If everything is a priority, you've written a wish list, not a ledger.</li>
+      <li>Log the lesson the same day you pay for it. Tuition unrecorded is tuition wasted.</li>
+    </ol></div>
+  <p style="margin-top:18px"><button class="btn" data-go="#/entry/${stats().next}">Start my next footprint →</button> <button class="btn alt" data-go="#/contents">Contents</button></p>`;
+}
+
+/* ---------- GOALS ---------- */
+function vGoals() {
+  return secHead("Top 5 goals for the next 90 footprints", "Write the goal, then the reason strong enough to survive a bad month") +
+    `<div class="sec">${S.goals.map((g, i) => `<div class="goal ${g.done ? "done" : ""}"><span class="num" style="width:40px;height:40px;font-size:18px;margin-top:6px">${i + 1}</span>
+      <div class="fields"><div><label class="lb">Goal ${i + 1}</label><input class="line" data-p="goals.${i}.g" value="${esc(g.g)}"></div>
+      <div><label class="lb">Why this matters</label><textarea class="line auto" rows="1" data-p="goals.${i}.why">${esc(g.why)}</textarea></div></div>
+      <label class="small" style="white-space:nowrap;margin-top:28px"><input type="checkbox" data-p="goals.${i}.done" ${g.done ? "checked" : ""}> Achieved</label></div>`).join("")}</div>
+    <p><button class="btn alt" data-go="#/vision">Next: Vision Board →</button></p>`;
+}
+
+/* ---------- VISION BOARD ---------- */
+function vVision() {
+  return secHead("Vision Board", "Sketch, paste, or describe the business and life you're building") + `
+  <div class="row" style="margin-bottom:18px"><label style="white-space:nowrap">My one-line vision:</label><input class="line" data-p="vision.line" value="${esc(S.vision.line)}"></div>
+  <div class="vcards">${VCARDS.map(([k, t]) => { const c = S.vision.cards[k]; return `<div class="vcard"><h4>${t}</h4><div class="hint">sketch • paste • describe</div>
+    ${c.img ? `<div class="vimg"><img src="${c.img}" alt="${esc(t)}"><button class="btn sm danger" data-act="vimgRm" data-k="${k}">Remove</button></div>` : ""}
+    <textarea class="box auto" style="min-height:120px" data-p="vision.cards.${k}.t" data-vk="${k}" placeholder="Describe it, or paste an image here…">${esc(c.t)}</textarea>
+    <div class="vtools"><label class="btn sm alt" style="cursor:pointer">📎 Add image<input type="file" accept="image/*" hidden data-vfile="${k}"></label><button class="btn sm alt" data-act="sketch" data-k="${k}">✏️ Sketch</button></div></div>`; }).join("")}</div>`;
+}
+afterRender["#/vision"] = () => { };
+
+/* ---------- PROMPTS ---------- */
+function vPrompts() {
+  return secHead("Prompt Library", "100 original prompts — pick one on any day you want a sharper question") +
+    `<div class="sec"><input class="line" id="pSearch" type="search" placeholder="Search the 100 prompts…" style="max-width:420px"></div><div id="pBody">${promptsHtml("")}</div>`;
+}
+function promptsHtml(q) {
+  const ql = q.trim().toLowerCase(); let out = "";
+  CATS.forEach(([name, a, b]) => {
+    let items = "";
+    for (let id = a; id <= b; id++) {
+      const t = PROMPTS[id - 1]; if (ql && !t.toLowerCase().includes(ql)) continue;
+      const shown = ql ? esc(t).replace(new RegExp(ql.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), m => `<mark>${m}</mark>`) : esc(t);
+      items += `<div class="p"><b>${id}.</b><div>${shown}<div class="acts"><button class="btn sm alt" data-act="usePrompt" data-id="${id}">Use in Footprint ${stats().next}</button><button class="btn sm alt" data-act="copyPrompt" data-id="${id}">Copy</button></div></div></div>`;
+    }
+    if (items) out += `<div class="pcat">${name}</div><div class="plist">${items}</div>`;
+  });
+  return out || `<p class="muted">No prompts match.</p>`;
+}
+afterRender["#/prompts"] = () => { $("#pSearch").addEventListener("input", e => { $("#pBody").innerHTML = promptsHtml(e.target.value); }); };
+
+/* ---------- ENTRIES INDEX ---------- */
+let eFilter = "all", eQuery = "";
+function vEntries() {
+  return secHead("Daily Entries — Footprints 1 to 90", "Undated by design. Miss a day, miss a week — nothing expires.") +
+    `<div class="sec row wrap"><input class="line" id="eSearch" type="search" placeholder="Search every entry…" style="max-width:340px" value="${esc(eQuery)}">
+     ${["all", "logged", "empty"].map(f => `<button class="btn sm ${eFilter === f ? "" : "alt"}" data-act="efilter" data-f="${f}">${f[0].toUpperCase() + f.slice(1)}</button>`).join("")}
+     <span class="small muted" style="margin-left:auto">${stats().n} of ${TOTAL} logged</span></div>
+     <div class="cards" id="eCards">${entryCards()}</div>`;
+}
+function entryCards() {
+  const q = eQuery.trim().toLowerCase(); let out = "";
+  for (let n = 1; n <= TOTAL; n++) {
+    const e = S.entries[n], f = isFilled(e);
+    if (eFilter === "logged" && !f) continue; if (eFilter === "empty" && f) continue;
+    if (q) { const txt = f ? [e.date, ...e.g, e.int, e.aff, e.ans, ...e.w, e.les, e.tom].join(" ").toLowerCase() : ""; if (!txt.includes(q)) continue; }
+    const snip = f ? (e.int || e.les || e.ans || (e.g.find(Boolean)) || "Logged") : "Not started";
+    out += `<button class="ecard ${f ? "" : "empty"}" data-go="#/entry/${n}"><b>Footprint ${n}</b> ${f && e.mood ? `<span class="chip">${MOODS[e.mood - 1]}</span>` : ""}${S.sample && S.sample.entries.includes(n) ? ' <span class="chip sample">sample</span>' : ""}<div class="small muted">${e && e.date ? fmtDate(e.date) : "&nbsp;"}</div><p>${esc(snip)}</p></button>`;
+  }
+  return out || `<p class="muted">Nothing matches.</p>`;
+}
+afterRender["#/entries"] = () => { $("#eSearch").addEventListener("input", e => { eQuery = e.target.value; $("#eCards").innerHTML = entryCards(); }); };
+
+/* ---------- ENTRY ---------- */
+function vEntry(arg) {
+  const n = clamp(parseInt(arg, 10) || S.ui.cur || 1); S.ui.cur = n;
+  const e = S.entries[n] || blankEntry(), P = `entries.${n}`;
+  const pid = pidOf(n, S.entries[n]), custom = S.entries[n] && S.entries[n].aff;
+  const jump = Array.from({ length: TOTAL }, (_, i) => { const k = i + 1; return `<button class="${k === n ? "c" : isFilled(S.entries[k]) ? "f" : ""}" data-go="#/entry/${k}" aria-label="Footprint ${k}">${k}</button>`; }).join("");
+  return `
+  <div class="entry-head"><div class="dt"><label class="lb" style="margin:0">Date</label><input class="line" type="date" style="width:170px" data-p="${P}.date" value="${esc(e.date)}"><button class="btn sm alt" data-act="today" data-n="${n}">Today</button></div>
+    <div class="row"><span class="small muted">Footprint ${n} of ${TOTAL}</span><span class="pill">DAY ${pad(n)}</span></div></div>
+  ${S.sample && S.sample.entries.includes(n) ? `<div class="warn">This is <b>sample</b> content. Editing it makes it yours; otherwise remove it in Settings.</div>` : ""}
+
+  <div class="sec"><h3>Gratitude</h3><p class="sub">Three assets already on the books</p>
+    ${[0, 1, 2].map(i => `<div class="row" style="margin:8px 0"><span class="num">${i + 1}</span><input class="line" data-p="${P}.g.${i}" value="${esc(e.g[i])}" placeholder="I am grateful for…"></div>`).join("")}</div>
+
+  <div class="sec"><h3>Daily Intention</h3><p class="sub">The one move that makes today count</p>
+    <div class="row"><b style="color:var(--brown);font-size:22px">→</b><input class="line" data-p="${P}.int" value="${esc(e.int)}" placeholder="Today I will…"></div></div>
+
+  <div class="sec cream aff"><div class="row" style="justify-content:space-between"><small>Affirmation of the day</small>${custom ? `<button class="btn sm alt" data-act="affReset" data-n="${n}">Reset to original</button>` : `<span class="small muted">tap to edit</span>`}</div>
+    <textarea class="auto" rows="1" data-p="${P}.aff" data-default="${esc(AFFS[n - 1])}">${esc(affOf(n, S.entries[n]))}</textarea></div>
+
+  <div class="sec"><h3>Mood &amp; Energy</h3><p class="sub">Circle your level</p>
+    <div class="moods">${MOODS.map((m, i) => `<button class="mood-b ${e.mood === i + 1 ? "on" : ""}" data-act="mood" data-n="${n}" data-v="${i + 1}" aria-pressed="${e.mood === i + 1}"><span class="ring">${i + 1}</span><small>${m}</small></button>`).join("")}</div></div>
+
+  <div class="sec"><h3>Habit Tracker</h3><p class="sub">Check each habit you completed today</p>
+    <div class="habits">${S.habits.map((h, i) => `<label class="hab"><input type="checkbox" data-p="${P}.hab.${i}" ${e.hab[i] ? "checked" : ""}> ${esc(h)}</label>`).join("")}</div></div>
+
+  <div class="sec"><h3>Today's Prompt</h3><p class="sub">Write freely — this is your business intelligence</p>
+    <div class="prompt-box"><div class="row top" style="justify-content:space-between"><span>${esc(PROMPTS[pid - 1])}</span><button class="btn sm alt" data-act="pickPrompt" data-n="${n}" style="white-space:nowrap">Change prompt</button></div>${pid !== n ? `<div class="small muted" style="margin-top:4px">Library prompt #${pid}</div>` : ""}</div>
+    <textarea class="box auto" style="border-radius:0 0 8px 8px;min-height:170px" data-p="${P}.ans" placeholder="Write freely…">${esc(e.ans)}</textarea></div>
+
+  <div class="sec"><h3>Wins of the Day</h3><p class="sub">Three things that moved forward today — any size counts</p>
+    ${[0, 1, 2].map(i => `<div class="row" style="margin:8px 0"><b style="color:var(--brown);min-width:48px">Win ${i + 1}</b><input class="line" data-p="${P}.w.${i}" value="${esc(e.w[i])}"></div>`).join("")}</div>
+
+  <div class="sec"><h3>Lesson Tuition</h3><p class="sub">What did today cost you — and what did it teach? Log it the same day you pay for it.</p>
+    <textarea class="line auto" rows="2" data-p="${P}.les" placeholder="Today's tuition bought me…">${esc(e.les)}</textarea></div>
+
+  <div class="sec"><h3>One Thing Worth Doing Tomorrow</h3><p class="sub">Leave tomorrow's first move for your future self</p>
+    <textarea class="line auto" rows="1" data-p="${P}.tom" placeholder="Tomorrow I will…">${esc(e.tom)}</textarea></div>
+
+  <div class="pager"><button class="btn alt" data-go="#/entry/${Math.max(1, n - 1)}" ${n === 1 ? "disabled" : ""}>← Previous</button>
+    <span class="row wrap"><button class="btn sm alt" data-act="entryPdf" data-n="${n}">🖨 PDF of this entry</button><button class="btn sm danger" data-act="clearEntry" data-n="${n}">Clear this entry</button></span>
+    <button class="btn" data-go="#/entry/${Math.min(TOTAL, n + 1)}" ${n === TOTAL ? "disabled" : ""}>${n === TOTAL ? "Last footprint" : "Next →"}</button></div>
+  <details style="margin-top:18px"><summary style="cursor:pointer;color:var(--brown);font-weight:600">Jump to a footprint</summary><div class="jump">${jump}</div></details>
+  ${n === TOTAL ? `<p style="margin-top:16px"><button class="btn green" data-go="#/closing">Go to the closing page →</button></p>` : ""}`;
+}
+
+/* ---------- CLOSING ---------- */
+function vClosing() {
+  const st = stats();
+  return `<div class="closing"><div class="dots divider" style="justify-content:center"><i></i><i></i><i></i></div>
+  <h2>Ninety Footprints. One Path.</h2>
+  <p>Flip back to Day 1. The person who wrote that entry was guessing. The person reading this one has evidence: ninety intentions, two hundred and seventy counted blessings, ninety lessons paid for and — this time — collected.</p>
+  <p>That is what a ledger is for. Not perfection, but proof. Proof that you showed up, adjusted, and kept walking when the numbers argued back.</p>
+  ${st.n ? `<div class="cream" style="margin:18px 0"><b style="color:var(--brown)">Your evidence so far:</b> ${st.n} footprints · ${st.gr} blessings counted · ${st.wins} wins · ${st.les} lessons collected.</div>` : ""}
+  <p style="font-weight:700;color:var(--brown)">The path continues. Start your next ledger.</p>
+  <div class="sig"><label class="lb">Signed</label><input class="line" data-p="closing.signed" value="${esc(S.closing.signed)}" style="text-align:center"></div>
+  <div class="ar" lang="ar">بسم الله الرحمن الرحيم</div>
+  <p class="small"><b>Zaid Adib Ansari</b> • The Balanced Middle Path Academy, LLC<br>Creed-to-Commerce™ • balancedmiddlepath.com</p>
+  <p class="row wrap" style="justify-content:center"><button class="btn" data-act="newLedger">Start my next ledger</button><button class="btn alt" data-go="#/reports">Create my PDF report</button></p></div>`;
+}
+
+/* ---------- ABOUT ---------- */
+function vAbout() {
+  return `<div class="closing"><div class="dots divider" style="justify-content:center"><i></i><i></i><i></i></div>
+  <h2>Journal Footprint Ledger</h2><p style="font-style:italic;color:#4B5563">Track the daily steps. Own the whole journey.</p><hr style="width:200px;border:0;border-top:2px solid var(--brown)">
+  <div class="ar" lang="ar">بسم الله الرحمن الرحيم</div><p class="small muted"><i>Bismillah Ar-Rahman Ar-Rahim</i></p>
+  <p style="margin-top:40px">© 2026 The Balanced Middle Path Academy, LLC. All rights reserved.</p>
+  <p class="small muted">Developed by Zaid Adib Ansari<br>For personal use by the purchaser. Not a substitute for professional financial, legal, or mental health advice.</p>
+  <p class="small muted">Creed-to-Commerce™ is a trademark of The Balanced Middle Path Academy, LLC.</p></div>`;
+}
+
+/* ---------- REPORTS ---------- */
+let rpOpts = { cover: true, goals: true, insights: true, lessons: true, entries: true, from: 1, to: TOTAL, blanks: false };
+function vReports() {
+  const o = rpOpts;
+  const cb = (k, t, d) => `<label class="hab" style="align-items:flex-start"><input type="checkbox" data-rp="${k}" ${o[k] ? "checked" : ""}><span><b>${t}</b><br><span class="small muted">${d}</span></span></label>`;
+  return secHead("PDF Reports", "Build a branded report, preview it, then Save as PDF (or print) from the preview.") + `
+  <div class="sec"><h3>Quick presets</h3><p class="sub">One tap, then adjust below</p>
+    <div class="row wrap"><button class="btn sm alt" data-act="rpPreset" data-t="full">Full ledger</button><button class="btn sm alt" data-act="rpPreset" data-t="week">Latest 7 entries (weekly review)</button><button class="btn sm alt" data-act="rpPreset" data-t="goals">Goals &amp; Vision only</button><button class="btn sm alt" data-act="rpPreset" data-t="insights">Insights &amp; lessons only</button></div></div>
+  <div class="sec"><h3>What to include</h3><p class="sub">Every report carries the Basmala, your creed, and Creed-to-Commerce™ branding</p>
+    <div class="grid g2">${cb("cover", "Cover &amp; profile", "Name, start date, 90-day intention and your creed")}${cb("goals", "Goals &amp; Vision Board", "Top 5 goals with reasons, one-line vision and board cards")}${cb("insights", "Insights summary", "Totals, mood chart, habit rates and runs")}${cb("lessons", "Wins &amp; lessons ledger", "Every win and lesson, in footprint order")}${cb("entries", "Daily entries", "Full footprint pages for the range below")}</div>
+    <div class="row wrap" style="margin-top:14px"><label>Footprints from <input class="line" type="number" min="1" max="90" style="width:90px;display:inline-block" data-rp="from" value="${o.from}"></label><label>to <input class="line" type="number" min="1" max="90" style="width:90px;display:inline-block" data-rp="to" value="${o.to}"></label>
+    <label class="small"><input type="checkbox" data-rp="blanks" ${o.blanks ? "checked" : ""}> Include empty entries (printable blank pages)</label></div></div>
+  <p class="row wrap"><button class="btn" data-act="rpGo">Preview &amp; create PDF</button><button class="btn alt" data-act="csv">Export entries as CSV</button></p>
+  <p class="small muted">Tip: in the print dialog choose “Save as PDF”, paper size A4 or Letter, and leave “Background graphics” on for the brown branding.</p>`;
+}
+function rpEntry(n) {
+  const e = S.entries[n] || blankEntry(), v = x => x ? `<p class="val">${esc(x)}</p>` : `<p class="val empty">—</p>`;
+  return `<section class="rp-page rp rp-entry"><div class="head"><div><b style="color:var(--brown)">${e.date ? fmtDate(e.date) : "Date: ________________"}</b></div><span class="pill">DAY ${pad(n)}</span></div>
+  <h3>Gratitude — three assets already on the books</h3>${e.g.map((g, i) => `<p class="val"><b style="color:var(--brown)">${i + 1}.</b> ${esc(g) || "—"}</p>`).join("")}
+  <h3>Daily intention</h3>${v(e.int)}
+  <div class="aff" style="margin-top:10px"><small style="color:var(--brown);font-weight:700;text-transform:uppercase">Affirmation of the day</small><br>${esc(affOf(n, S.entries[n]))}</div>
+  <div class="two"><div><h3>Mood &amp; energy</h3><p class="val">${e.mood ? e.mood + " / 5 — " + MOODS[e.mood - 1] : "—"}</p></div>
+  <div><h3>Habit tracker</h3>${S.habits.map((h, i) => `<span style="margin-right:12px;white-space:nowrap">${e.hab[i] ? "☑" : "☐"} ${esc(h)}</span>`).join("")}</div></div>
+  <h3>Today's prompt</h3><p class="val" style="font-style:italic">${esc(PROMPTS[pidOf(n, S.entries[n]) - 1])}</p>${v(e.ans)}
+  <h3>Wins of the day</h3>${e.w.map((w, i) => `<p class="val"><b style="color:var(--brown)">Win ${i + 1}:</b> ${esc(w) || "—"}</p>`).join("")}
+  <h3>Lesson tuition</h3>${v(e.les)}<h3>One thing worth doing tomorrow</h3>${v(e.tom)}</section>`;
+}
+function buildReport(o) {
+  const st = stats(), P = S.profile; let pages = "";
+  const from = clamp(Math.min(o.from, o.to)), to = clamp(Math.max(o.from, o.to));
+  if (o.cover) pages += `<section class="rp-page rp-cover"><div class="ar" lang="ar">بسم الله الرحمن الرحيم</div><p><i>Bismillah Ar-Rahman Ar-Rahim</i></p><div class="dots" style="justify-content:center;margin:30px 0 10px"><i></i><i></i><i></i></div><h1>Journal Footprint Ledger</h1><p style="font-style:italic;font-size:18px">Track the daily steps. Own the whole journey.</p><hr style="width:50%;border:0;border-top:1.5px solid #fff;margin:26px auto">
+    <p style="font-size:20px"><b>${esc(P.name) || "Founder"}</b></p>${P.start ? `<p>Started ${fmtDate(P.start)}</p>` : ""}${P.intention ? `<p style="max-width:520px;margin:10px auto"><i>“${esc(P.intention)}”</i></p>` : ""}
+    ${P.creed ? `<div style="max-width:560px;margin:26px auto;border:1px solid #C8A24A;border-radius:10px;padding:14px 18px"><small style="color:#E7CF8A;letter-spacing:1px;text-transform:uppercase">My Creed — Creed-to-Commerce™</small><div class="ar" lang="ar" style="font-size:24px;direction:ltr">${esc(P.creed)}</div></div>` : ""}
+    <p style="margin-top:50px;font-size:13px">Report generated ${longDate()} • ${st.n} of ${TOTAL} footprints logged<br>The Balanced Middle Path Academy, LLC • Creed-to-Commerce™</p></section>`;
+  if (o.goals) pages += `<section class="rp-page rp"><h2>Top 5 goals for the next 90 footprints</h2><table><tr><th style="width:36px">#</th><th>Goal</th><th>Why this matters</th><th style="width:70px">Status</th></tr>${S.goals.map((g, i) => `<tr><td><b style="color:var(--brown)">${i + 1}</b></td><td>${esc(g.g) || "—"}</td><td>${esc(g.why) || "—"}</td><td>${g.done ? "Achieved" : "Open"}</td></tr>`).join("")}</table>
+    <h2 style="margin-top:24px">Vision Board</h2><p><b>My one-line vision:</b> ${esc(S.vision.line) || "—"}</p><div class="two">${VCARDS.map(([k, t]) => { const c = S.vision.cards[k]; return `<div class="row-keep"><h3>${t}</h3>${c.img ? `<img class="rp-vimg" src="${c.img}" alt="">` : ""}<p class="val ${c.t ? "" : "empty"}">${esc(c.t) || "—"}</p></div>`; }).join("")}</div></section>`;
+  if (o.insights) pages += `<section class="rp-page rp"><h2>Insights summary</h2><div class="two"><table>
+    <tr><td>Footprints logged</td><td><b>${st.n} of ${TOTAL}</b></td></tr><tr><td>Current run / best run</td><td><b>${st.run} / ${st.best}</b></td></tr><tr><td>Blessings counted</td><td><b>${st.gr}</b></td></tr><tr><td>Wins recorded</td><td><b>${st.wins}</b></td></tr><tr><td>Lessons collected</td><td><b>${st.les}</b></td></tr><tr><td>Tomorrow-moves set</td><td><b>${st.tom}</b></td></tr><tr><td>Average mood &amp; energy</td><td><b>${st.moodN ? st.avgMood.toFixed(1) + " / 5" : "—"}</b></td></tr><tr><td>Goals achieved</td><td><b>${st.goalsDone} of ${st.goalsSet || 5}</b></td></tr></table>
+    <table>${S.habits.map((h, i) => { const r = st.n ? Math.round(st.hab[i] / st.n * 100) : 0; return `<tr><td>${esc(h)}</td><td style="width:50%"><div style="background:#F5ECE6;border-radius:99px;height:10px"><div style="background:#93410F;height:10px;border-radius:99px;width:${r}%"></div></div></td><td style="width:44px"><b>${r}%</b></td></tr>`; }).join("")}</table></div>
+    <h3 style="margin-top:22px">Mood &amp; energy across the footprints</h3>${moodChart()}</section>`;
+  if (o.lessons) {
+    const rows = st.ns.filter(n => S.entries[n].les || S.entries[n].w.some(Boolean));
+    pages += `<section class="rp-page rp"><h2>Wins &amp; lessons ledger</h2><p class="small muted">“Tuition unrecorded is tuition wasted.”</p>${rows.length ? `<table><tr><th style="width:56px">Day</th><th>Wins</th><th>Lesson tuition</th></tr>${rows.map(n => { const e = S.entries[n]; return `<tr class="row-keep"><td><b style="color:var(--brown)">${pad(n)}</b></td><td>${e.w.filter(Boolean).map(esc).join("<br>") || "—"}</td><td>${esc(e.les) || "—"}</td></tr>`; }).join("")}</table>` : `<p class="muted">No wins or lessons logged yet.</p>`}</section>`;
+  }
+  if (o.entries) {
+    let any = false;
+    for (let n = from; n <= to; n++) { if (o.blanks || isFilled(S.entries[n])) { pages += rpEntry(n); any = true; } }
+    if (!any) pages += `<section class="rp-page rp"><h2>Daily entries</h2><p class="muted">No logged entries in footprints ${from}–${to}. Tick “Include empty entries” to print blank pages.</p></section>`;
+  }
+  if (!pages) pages = `<section class="rp-page rp"><p>Select at least one section.</p></section>`;
+  return pages;
+}
+function openReport(o, title) {
+  $("#rp").innerHTML = `<div class="rp-bar"><b>${title || "Report preview"}</b><span class="small" style="opacity:.9">Choose “Save as PDF” in the print dialog.</span><span style="margin-left:auto" class="row"><button class="btn sm" data-act="rpPrint">🖨 Save as PDF / Print</button><button class="btn sm" data-act="rpClose">Close</button></span></div><div class="rp-pages rp">${buildReport(o)}</div>`;
+  document.body.classList.add("rp-open"); $("#rp").scrollTop = 0;
+}
+function closeReport() { document.body.classList.remove("rp-open"); $("#rp").innerHTML = ""; }
+function printReport() {
+  const old = document.title, nm = (S.profile.name || "Founder").replace(/[^\w\- ]+/g, "").trim().replace(/\s+/g, "-");
+  document.title = `Journal-Footprint-Ledger_${nm}_${todayStr()}`;
+  setTimeout(() => { window.print(); setTimeout(() => { document.title = old; }, 800); }, 60);
+}
+
+/* ---------- SETTINGS ---------- */
+function vSettings() {
+  return secHead("Settings & Data", "Your ledger, your control — edit anything, any time") + `
+  <div class="sec"><h3>Habit tracker labels</h3><p class="sub">Rename the four daily habits to match how you work (applies to every entry and report)</p>
+    <div class="grid g2">${S.habits.map((h, i) => `<div><label class="lb">Habit ${i + 1}</label><input class="line" data-p="habits.${i}" value="${esc(h)}"></div>`).join("")}</div></div>
+  <div class="sec"><h3>Backup &amp; restore</h3><p class="sub">${S.lastBackup ? "Last backup: " + esc(S.lastBackup) : "No backup yet"} — entries live only on this device, so export regularly.</p>
+    <div class="row wrap"><button class="btn" data-act="export">⬇ Export backup (JSON)</button><label class="btn alt" style="cursor:pointer">⬆ Import backup<input type="file" accept="application/json,.json" hidden id="importFile"></label><button class="btn alt" data-act="csv">Export entries (CSV)</button></div></div>
+  <div class="sec"><h3>Privacy lock</h3><p class="sub">${S.lock ? "A passcode is set. It keeps casual visitors out; it is not encryption — keep backups safe." : "Optional passcode shown each time the app is opened."}</p>
+    <div class="row wrap"><input class="line" id="newPass" type="password" placeholder="${S.lock ? "New passcode" : "Choose a passcode"}" style="max-width:240px" autocomplete="new-password"><button class="btn" data-act="setPass">${S.lock ? "Change passcode" : "Set passcode"}</button>${S.lock ? `<button class="btn alt" data-act="rmPass">Remove passcode</button>` : ""}</div></div>
+  <div class="sec"><h3>Sample data</h3><p class="sub">${S.sample ? "Sample data is currently loaded. Removing it deletes only the sample items you have not edited." : "Load a few example footprints, goals and vision cards to see how the ledger works."}</p>
+    <div class="row wrap">${S.sample ? `<button class="btn danger" data-act="rmSample">Remove sample data</button>` : `<button class="btn alt" data-act="loadSample">Load sample data</button>`}</div></div>
+  <div class="sec"><h3>Start over</h3><p class="sub">Permanently erases every entry, goal, vision card, setting and passcode on this device.</p>
+    <button class="btn danger" data-act="eraseAll">Erase everything…</button></div>
+  <div class="small muted">Creed-to-Commerce™ • The Balanced Middle Path Academy, LLC • v1.0</div>`;
+}
+afterRender["#/settings"] = () => { const f = $("#importFile"); if (f) f.addEventListener("change", e => importBackup(e.target.files[0])); };
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+function download(name, text, type) { const b = new Blob([text], { type }), a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+function exportBackup() { S.lastBackup = longDate(); saveNow(); download(`JFL-backup-${todayStr()}.json`, JSON.stringify(S, null, 1), "application/json"); toast("Backup downloaded."); if (location.hash === "#/settings") route(); }
+function importBackup(file) {
+  if (!file) return; const r = new FileReader();
+  r.onload = () => { try { const o = JSON.parse(r.result); if (!o || typeof o !== "object" || !o.entries) throw 0; if (!confirm("Replace everything currently in this app with the backup?")) return; S = normalise(o); saveNow(); toast("Backup restored."); route(); } catch (e) { toast("That file is not a valid ledger backup."); } };
+  r.readAsText(file);
+}
+function csvCell(v) { return '"' + String(v ?? "").replace(/"/g, '""') + '"'; }
+function exportCsv() {
+  const head = ["Footprint", "Date", "Gratitude 1", "Gratitude 2", "Gratitude 3", "Intention", "Affirmation", "Mood", ...S.habits, "Prompt", "Prompt answer", "Win 1", "Win 2", "Win 3", "Lesson", "Tomorrow"];
+  const rows = [head.map(csvCell).join(",")];
+  for (let n = 1; n <= TOTAL; n++) { const e = S.entries[n]; if (!isFilled(e)) continue; rows.push([n, e.date, ...e.g, e.int, affOf(n, e), e.mood ? MOODS[e.mood - 1] : "", ...e.hab.map(h => h ? "Yes" : "No"), PROMPTS[pidOf(n, e) - 1], e.ans, ...e.w, e.les, e.tom].map(csvCell).join(",")); }
+  download(`JFL-entries-${todayStr()}.csv`, "﻿" + rows.join("\n"), "text/csv;charset=utf-8"); toast("CSV downloaded.");
+}
+async function sha(s) { try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("bmpa-jfl::" + s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); } catch (e) { let h = 5381; for (const c of "bmpa-jfl::" + s) h = ((h << 5) + h + c.charCodeAt(0)) | 0; return "d" + h; } }
+
+const SAMPLE = {
+  profile: { name: "Sample Founder", start: "", intention: "Build one reliable revenue habit and learn what my numbers are telling me.", creed: "I will only sell what I can stand behind before Allah and before my customer." },
+  goals: [["Launch my flagship offer", "It turns my skills into a product that works while I sleep."], ["Reach 25 paying customers", "Proof that the offer solves a real problem."], ["Save three months of operating costs", "A cushion lets me decide from strength, not fear."], ["Hire a part-time assistant", "I want my hours back for the work only I can do."], ["Protect Fajr-to-breakfast for deep work", "My best judgment arrives before the inbox does."]],
+  vision: { line: "A calm, profitable business that serves my community and runs on principle.", cards: { flagship: "A simple, well-priced offer with a clear promise.", team: "Two trusted partners and one great assistant.", customer: "Owners who value honesty over hype.", workspace: "A quiet desk, morning light, and a closed laptop by 5pm.", legacy: "Customers who say their lives got easier.", enough: "A comfortable monthly figure — written down, not chased." } },
+  entries: [
+    { g: ["My health", "A client who paid early", "Quiet morning to think"], int: "Send the three overdue proposals.", mood: 4, hab: [1, 1, 0, 1], ans: "Three years on, the first thing my younger self would notice is how few meetings there are.", w: ["Sent two proposals", "Cleared my inbox", "Walked after Asr"], les: "Starting with the hardest task cost me 20 minutes of dread but saved the whole afternoon.", tom: "Follow up on the two proposals." },
+    { g: ["Supportive family", "A fixed monthly retainer", "Fresh bread at lunch"], int: "Finish the pricing page.", mood: 3, hab: [1, 0, 1, 0], ans: "I'd cut the low-margin projects first and keep only the two clients I enjoy.", w: ["Pricing page drafted", "Declined a bad-fit project"], les: "Saying no on day one is cheaper than saying no in week four.", tom: "Publish the pricing page." },
+    { g: ["Reliable internet", "A kind customer review", "My morning routine"], int: "Call three past customers.", mood: 5, hab: [1, 1, 1, 1], ans: "Customers mostly buy the feeling of relief after the problem is gone.", w: ["Three calls completed", "One referral promised", "Updated my CRM"], les: "A ten-minute call revived a relationship I thought had gone cold.", tom: "Send the referral intro email." }
+  ]
+};
+function loadSample() {
+  if (S.sample) return;
+  const emptyProfile = !S.profile.name && !S.profile.intention && !S.profile.creed;
+  const emptyGoals = S.goals.every(g => !g.g && !g.why), emptyVision = !S.vision.line && Object.values(S.vision.cards).every(c => !c.t && !c.img);
+  const sm = { entries: [], goals: false, vision: false, profile: false };
+  if (emptyProfile) { Object.assign(S.profile, SAMPLE.profile); sm.profile = true; }
+  if (emptyGoals) { S.goals = SAMPLE.goals.map(([g, why]) => ({ g, why, done: false })); sm.goals = true; }
+  if (emptyVision) { S.vision.line = SAMPLE.vision.line; Object.entries(SAMPLE.vision.cards).forEach(([k, t]) => { S.vision.cards[k].t = t; }); sm.vision = true; }
+  SAMPLE.entries.forEach((src, i) => { const n = i + 1; if (!isFilled(S.entries[n])) { S.entries[n] = Object.assign(blankEntry(), JSON.parse(JSON.stringify(src))); sm.entries.push(n); } });
+  S.sample = sm; saveNow(); toast("Sample data loaded."); route();
+}
+function removeSample() {
+  const sm = S.sample; if (!sm) return;
+  sm.entries.forEach(n => { delete S.entries[n]; });
+  if (sm.goals) S.goals = blank().goals;
+  if (sm.vision) S.vision = blank().vision;
+  if (sm.profile) S.profile = blank().profile;
+  S.sample = null; saveNow(); toast("Sample data removed."); route();
+}
+function eraseAll() {
+  if (!confirm("Erase EVERYTHING in this app on this device? This cannot be undone (export a backup first if unsure).")) return;
+  if (!confirm("Last check — erase all entries, goals, vision board and settings?")) return;
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  S = blank(); sess.set("jfl_unlocked", ""); saveNow(); toast("Everything erased."); location.hash = "#/home"; route();
+}
+function newLedger() {
+  if (!confirm("Download a backup of this finished ledger, then clear it to begin a fresh 90 footprints? (Your name, creed and habit labels will be kept.)")) return;
+  exportBackup();
+  const keep = { name: S.profile.name, creed: S.profile.creed }, habits = S.habits.slice(), lock = S.lock;
+  S = blank(); S.profile.name = keep.name; S.profile.creed = keep.creed; S.habits = habits; S.lock = lock; saveNow(); toast("A fresh ledger is ready."); location.hash = "#/belongs"; route();
+}
+
+/* ---------- image helpers (vision board) ---------- */
+function shrink(src, cb) {
+  const img = new Image(); img.onload = () => { const max = 640, k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height); cb(c.toDataURL("image/jpeg", .72)); }; img.onerror = () => toast("Could not read that image."); img.src = src;
+}
+function attachImage(k, file) { if (!file || !file.type.startsWith("image/")) return; const r = new FileReader(); r.onload = () => shrink(r.result, d => { setPath(`vision.cards.${k}.img`, d); route(); toast("Image added."); }); r.readAsDataURL(file); }
+
+/* ---------- modals ---------- */
+function openModal(title, body, wide) { closeModal(); const d = document.createElement("div"); d.className = "modal-bg"; d.id = "modal"; d.innerHTML = `<div class="modal" role="dialog" aria-label="${esc(title)}"><header><h3>${esc(title)}</h3><button class="btn sm alt" data-act="closeModal">Close</button></header><div class="body">${body}</div></div>`; d.addEventListener("mousedown", e => { if (e.target === d) closeModal(); }); document.body.appendChild(d); return d; }
+function closeModal() { const m = $("#modal"); if (m) m.remove(); }
+function pickPrompt(n) {
+  const draw = q => { const ql = q.toLowerCase(); return CATS.map(([nm, a, b]) => { let it = ""; for (let id = a; id <= b; id++) { if (ql && !PROMPTS[id - 1].toLowerCase().includes(ql)) continue; it += `<div class="p"><b>${id}.</b><div>${esc(PROMPTS[id - 1])}<div class="acts"><button class="btn sm" data-act="setPrompt" data-n="${n}" data-id="${id}">Use this prompt</button></div></div></div>`; } return it ? `<div class="pcat" style="font-size:16px">${nm}</div>${it}` : ""; }).join("") || `<p class="muted">No match.</p>`; };
+  const m = openModal(`Choose a prompt for Footprint ${n}`, `<input class="line" id="mpSearch" type="search" placeholder="Search prompts…"><div id="mpBody">${draw("")}</div>${S.entries[n] && S.entries[n].pid ? `<p><button class="btn sm alt" data-act="setPrompt" data-n="${n}" data-id="0">Restore this day's original prompt</button></p>` : ""}`);
+  $("#mpSearch", m).addEventListener("input", e => { $("#mpBody", m).innerHTML = draw(e.target.value); });
+}
+function sketchPad(k) {
+  const m = openModal("Sketch", `<canvas id="sk" width="800" height="600"></canvas><div class="row wrap" style="margin-top:10px"><label class="small">Colour <input type="color" id="skC" value="#93410F"></label><label class="small">Brush <input type="range" id="skW" min="1" max="18" value="4"></label><button class="btn sm alt" id="skClr">Clear</button><button class="btn" id="skSave" style="margin-left:auto">Save sketch to card</button></div>`);
+  const c = $("#sk", m), x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, 800, 600); x.lineCap = "round"; x.lineJoin = "round";
+  let down = false, last = null;
+  const pt = e => { const r = c.getBoundingClientRect(); return [(e.clientX - r.left) * c.width / r.width, (e.clientY - r.top) * c.height / r.height]; };
+  c.addEventListener("pointerdown", e => { down = true; last = pt(e); c.setPointerCapture(e.pointerId); x.strokeStyle = $("#skC", m).value; x.lineWidth = +$("#skW", m).value; x.beginPath(); x.moveTo(...last); x.lineTo(last[0] + .1, last[1]); x.stroke(); });
+  c.addEventListener("pointermove", e => { if (!down) return; const p = pt(e); x.beginPath(); x.moveTo(...last); x.lineTo(...p); x.stroke(); last = p; });
+  ["pointerup", "pointercancel"].forEach(ev => c.addEventListener(ev, () => { down = false; }));
+  $("#skClr", m).onclick = () => { x.fillStyle = "#fff"; x.fillRect(0, 0, 800, 600); };
+  $("#skSave", m).onclick = () => { shrink(c.toDataURL("image/png"), d => { setPath(`vision.cards.${k}.img`, d); closeModal(); route(); toast("Sketch saved."); }); };
+}
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+const ACT = {
+  closeModal, quickReport() { location.hash = "#/reports"; },
+  today(el) { const n = +el.dataset.n; setPath(`entries.${n}.date`, todayStr()); route(); },
+  mood(el) { const n = +el.dataset.n, v = +el.dataset.v, cur = (S.entries[n] || {}).mood; setPath(`entries.${n}.mood`, cur === v ? 0 : v); $$(".mood-b").forEach(b => { const on = +b.dataset.v === (cur === v ? 0 : v); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); }); },
+  affReset(el) { const n = +el.dataset.n; setPath(`entries.${n}.aff`, ""); route(); },
+  clearEntry(el) { const n = +el.dataset.n; if (!isFilled(S.entries[n])) return toast("This entry is already empty."); if (!confirm(`Clear everything written in Footprint ${n}?`)) return; delete S.entries[n]; if (S.sample) S.sample.entries = S.sample.entries.filter(x => x !== n); queueSave(); route(); toast("Entry cleared."); },
+  entryPdf(el) { const n = +el.dataset.n; openReport({ cover: false, goals: false, insights: false, lessons: false, entries: true, from: n, to: n, blanks: true }, `Footprint ${n} — PDF`); },
+  pickPrompt(el) { pickPrompt(+el.dataset.n); },
+  setPrompt(el) { const n = +el.dataset.n, id = +el.dataset.id; setPath(`entries.${n}.pid`, id === n ? 0 : id); closeModal(); route(); toast(id ? `Prompt #${id} set for Footprint ${n}.` : "Original prompt restored."); },
+  usePrompt(el) { const n = stats().next, id = +el.dataset.id; setPath(`entries.${n}.pid`, id === n ? 0 : id); toast(`Prompt #${id} will appear in Footprint ${n}.`); },
+  copyPrompt(el) { const t = PROMPTS[+el.dataset.id - 1]; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast("Prompt copied."), () => toast("Copy not available here.")); },
+  efilter(el) { eFilter = el.dataset.f; route(); },
+  vimgRm(el) { setPath(`vision.cards.${el.dataset.k}.img`, ""); route(); },
+  sketch(el) { sketchPad(el.dataset.k); },
+  rpPreset(el) {
+    const t = el.dataset.t, o = rpOpts; Object.assign(o, { cover: true, goals: false, insights: false, lessons: false, entries: false, blanks: false, from: 1, to: TOTAL });
+    if (t === "full") Object.assign(o, { goals: true, insights: true, lessons: true, entries: true });
+    if (t === "week") { const ns = stats().ns; const last = ns.length ? ns[ns.length - 1] : 1; Object.assign(o, { insights: true, lessons: true, entries: true, from: Math.max(1, last - 6), to: last }); }
+    if (t === "goals") Object.assign(o, { goals: true });
+    if (t === "insights") Object.assign(o, { insights: true, lessons: true });
+    route();
+  },
+  rpGo() { openReport(rpOpts, "Report preview"); },
+  rpPrint: printReport, rpClose: closeReport,
+  csv: exportCsv, export: exportBackup, loadSample, rmSample: removeSample, eraseAll, newLedger,
+  async setPass() { const v = $("#newPass").value; if (v.length < 4) return toast("Use at least 4 characters."); S.lock = await sha(v); sess.set("jfl_unlocked", "1"); saveNow(); toast("Passcode saved."); route(); },
+  rmPass() { if (!confirm("Remove the passcode?")) return; S.lock = null; saveNow(); toast("Passcode removed."); route(); }
+};
+document.addEventListener("click", e => {
+  const go = e.target.closest("[data-go]"); if (go && !go.disabled) { e.preventDefault(); const h = go.dataset.go; if (location.hash === h) route(); else location.hash = h; return; }
+  const a = e.target.closest("[data-act]"); if (a && ACT[a.dataset.act]) { e.preventDefault(); ACT[a.dataset.act](a); }
+});
+function onField(e) {
+  const el = e.target;
+  if (el.dataset.rp) { const k = el.dataset.rp; rpOpts[k] = el.type === "checkbox" ? el.checked : clamp(+el.value); return; }
+  if (el.dataset.vfile) { attachImage(el.dataset.vfile, el.files[0]); return; }
+  if (!el.dataset.p) return;
+  const isChk = el.type === "checkbox"; if (e.type === "input" && isChk) return; if (e.type === "change" && !isChk && el.type !== "date") return;
+  let v = isChk ? (el.dataset.p.startsWith("goals") ? el.checked : el.checked ? 1 : 0) : el.value;
+  if (el.dataset.default !== undefined && v.trim() === el.dataset.default) v = "";   // untouched original affirmation stays default
+  setPath(el.dataset.p, v);
+  if (el.matches("textarea.auto")) grow(el);
+  if (el.dataset.p.startsWith("goals") && isChk) route();
+}
+document.addEventListener("input", onField);
+document.addEventListener("change", onField);
+document.addEventListener("paste", e => {
+  const ta = e.target.closest && e.target.closest("[data-vk]"); if (!ta) return;
+  const it = [...(e.clipboardData || {}).items || []].find(i => i.type.startsWith("image/")); if (it) { e.preventDefault(); attachImage(ta.dataset.vk, it.getAsFile()); }
+});
+window.addEventListener("hashchange", route);
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("#modal")) closeModal(); else if (document.body.classList.contains("rp-open")) closeReport(); } });
+
+/* ============================================================
+   BOOT: cover → (lock) → app
+   ============================================================ */
+function showApp() { $("#cover").style.display = "none"; $("#lock").style.display = "none"; $("#app").style.display = "block"; route(); }
+function afterCover() {
+  sess.set("jfl_cover", "1");
+  if (S.lock && !sess.get("jfl_unlocked")) { $("#cover").style.display = "none"; $("#lock").style.display = "flex"; $("#lockIn").focus(); } else showApp();
+}
+$("#beginBtn").addEventListener("click", afterCover);
+async function tryUnlock() { const v = $("#lockIn").value; if (!v) return; if ((await sha(v)) === S.lock) { sess.set("jfl_unlocked", "1"); $("#lockIn").value = ""; showApp(); } else { $("#lockErr").textContent = "That passcode doesn't match."; } }
+$("#lockBtn").addEventListener("click", tryUnlock);
+$("#lockIn").addEventListener("keydown", e => { if (e.key === "Enter") tryUnlock(); });
+$("#lockReset").addEventListener("click", () => { if (!confirm("This erases ALL entries and settings on this device. Continue?")) return; try { localStorage.removeItem(KEY); } catch (e) {} S = blank(); sess.set("jfl_unlocked", ""); saveNow(); showApp(); });
+if (sess.get("jfl_cover")) { afterCover(); }
+</script>
+</body>
+</html>
